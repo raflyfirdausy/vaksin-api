@@ -45,6 +45,61 @@ class Api extends RFLController
         die;
     }
 
+    public function ubah_password()
+    {
+        $id_user                    = $this->input->post("id_user");
+        $password_lama              = $this->input->post("password_lama");
+        $password_baru              = $this->input->post("password_baru");
+        $password_baru_konfirmasi   = $this->input->post("password_baru_konfirmasi");
+
+        if (empty($password_lama)) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Password lama tidak boleh kosong",
+            ]);
+            die;
+        }
+
+        if (empty($password_baru)) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Password Baru tidak boleh kosong",
+            ]);
+            die;
+        }
+
+        if (empty($password_baru_konfirmasi)) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Konfirmasi password Baru tidak boleh kosong",
+            ]);
+            die;
+        }
+
+        if ($password_baru != $password_baru_konfirmasi) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Konfirmasi password Baru tidak sama",
+            ]);
+            die;
+        }
+
+        $cek = $this->login->where(["id_user" => $id_user, "password" => md5($password_lama)])->get();
+        if (!$cek) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Password Lama yang kamu masukan salah",
+            ]);
+            die;
+        }
+
+        $this->login->where(["id_user" => $id_user])->update(["password" => md5($password_baru)]);
+        echo json_encode([
+            "code"      => 200,
+            "message"   => "Password Berhasil diubah. Silahkan login ulang menggunakan password yang baru",
+        ]);
+    }
+
     public function data_vaksin()
     {
         $id_desa = $this->input->get('id_desa');
