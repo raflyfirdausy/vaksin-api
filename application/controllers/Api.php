@@ -22,6 +22,75 @@ class Api extends RFLController
         ]);
     }
 
+    public function register()
+    {
+        $username           = $this->input->post("username");
+        $password           = $this->input->post("password");
+        $nama               = $this->input->post("nama");
+        $id_jenis_kelamin   = $this->input->post("id_jenis_kelamin");
+
+        //TODO : CEK USERNAME IF EXIST OR NOT
+        $cek = $this->login->where(["username" => $username])->get();
+        if ($cek) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Username $username telah terdaftar, silahkan gunakan username yang lain",
+                "data"      => NULL
+            ]);
+            die;
+        }
+
+        if (empty($password) || $password == "") {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Password tidak boleh kosong",
+                "data"      => NULL
+            ]);
+            die;
+        }
+
+        if (empty($nama) || $nama == "") {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Nama tidak boleh kosong",
+                "data"      => NULL
+            ]);
+            die;
+        }
+
+        if (empty($id_jenis_kelamin) || $id_jenis_kelamin == "") {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Jenis Kelamin tidak boleh kosong",
+                "data"      => NULL
+            ]);
+            die;
+        }
+
+        //TODO : INSERT INTO DB
+        $insert = $this->login->insert([
+            "nama"              => $nama,
+            "id_jenis_kelamin"  => $id_jenis_kelamin,
+            "username"          => $username,
+            "password"          => md5($password),
+        ]);
+
+        if (!$insert) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Terjadi kesalahan saat melakukan pendaftaran",
+                "data"      => NULL
+            ]);
+            die;
+        }
+
+        echo json_encode([
+            "code"      => 200,
+            "message"   => "Pendaftaran berhasil",
+        ]);
+        die;
+    }
+
     public function login()
     {
         $username = $this->input->post('username');
