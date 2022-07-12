@@ -24,36 +24,16 @@ class Api extends RFLController
 
     public function register()
     {
-        $username           = $this->input->post("username");
-        $password           = $this->input->post("password");
-        $nama               = $this->input->post("nama");
-        $id_jenis_kelamin   = $this->input->post("id_jenis_kelamin");
-
-        //TODO : CEK USERNAME IF EXIST OR NOT
-        $cek = $this->login->where(["username" => $username])->get();
-        if ($cek) {
-            echo json_encode([
-                "code"      => 404,
-                "message"   => "Username $username telah terdaftar, silahkan gunakan username yang lain",
-                "data"      => NULL
-            ]);
-            die;
-        }
-
-        if (empty($password) || $password == "") {
-            echo json_encode([
-                "code"      => 404,
-                "message"   => "Password tidak boleh kosong",
-                "data"      => NULL
-            ]);
-            die;
-        }
+        $username               = $this->input->post("username");
+        $password               = $this->input->post("password");
+        $konfirmasi_password    = $this->input->post("konfirmasi_password");
+        $nama                   = $this->input->post("nama");
+        $id_jenis_kelamin       = $this->input->post("id_jenis_kelamin");
 
         if (empty($nama) || $nama == "") {
             echo json_encode([
                 "code"      => 404,
                 "message"   => "Nama tidak boleh kosong",
-                "data"      => NULL
             ]);
             die;
         }
@@ -62,7 +42,32 @@ class Api extends RFLController
             echo json_encode([
                 "code"      => 404,
                 "message"   => "Jenis Kelamin tidak boleh kosong",
-                "data"      => NULL
+            ]);
+            die;
+        }
+
+        if (empty($password) || $password == "") {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Password tidak boleh kosong",
+            ]);
+            die;
+        }
+
+        if ($password != $konfirmasi_password) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Konfirmasi password yang kamu masukan salah !",
+            ]);
+            die;
+        }       
+
+        //TODO : CEK USERNAME IF EXIST OR NOT
+        $cek = $this->login->where(["username" => $username])->get();
+        if ($cek) {
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Username $username telah terdaftar, silahkan gunakan username yang lain",
             ]);
             die;
         }
