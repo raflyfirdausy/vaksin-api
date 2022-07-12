@@ -30,6 +30,8 @@ class Api extends RFLController
         $nama                   = $this->input->post("nama");
         $id_jenis_kelamin       = $this->input->post("id_jenis_kelamin");
 
+        $passMinKarakter        = 6;
+
         if (empty($nama) || $nama == "") {
             echo json_encode([
                 "code"      => 404,
@@ -42,6 +44,14 @@ class Api extends RFLController
             echo json_encode([
                 "code"      => 404,
                 "message"   => "Jenis Kelamin tidak boleh kosong",
+            ]);
+            die;
+        }
+
+        if(strlen($password) < $passMinKarakter){
+            echo json_encode([
+                "code"      => 404,
+                "message"   => "Password minimal $passMinKarakter Karakter",
             ]);
             die;
         }
