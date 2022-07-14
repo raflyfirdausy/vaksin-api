@@ -11,6 +11,7 @@ class Api extends RFLController
         $this->load->model("Desa_model", "desa");
         $this->load->model("Kecamatan_model", "kecamatan");
         $this->load->model("KategoriUmur_model", "kategoriUmur");
+        $this->load->model("Jadwal_model", "jadwal");
     }
 
 
@@ -238,6 +239,15 @@ class Api extends RFLController
         }
 
         $data = $this->kecamatan->as_array()->where($where)->get_all() ?: [];
+        echo json_encode([
+            "code"      => 200,
+            "message"   => "Data ditemukan",
+            "data"      => $data
+        ]);
+    }
+
+    public function jadwal(){
+        $data = $this->jadwal->as_array()->get_all() ?: [];
         echo json_encode([
             "code"      => 200,
             "message"   => "Data ditemukan",
