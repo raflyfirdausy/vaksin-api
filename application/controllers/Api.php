@@ -247,7 +247,7 @@ class Api extends RFLController
     }
 
     public function jadwal(){
-        $data = $this->jadwal->as_array()->get_all() ?: [];
+        $data = $this->jadwal->as_array()->order_by("tanggal", "ASC")->get_all() ?: [];
         echo json_encode([
             "code"      => 200,
             "message"   => "Data ditemukan",
